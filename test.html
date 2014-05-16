@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ManojSaria</title>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="static/bootstrap.min.js"></script>
+<script ty[e="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript" src="static/jquery-1.7.2.min.js"></script>
+<style rel="stylesheet" type="text/css">
+
+body {
+    font-family: 'Open Sans', sans-serif;
+	background-color: #DCCCFF;
+
+}
+ #map_canvas{
+ 	border-radius:20px;
+    font-size:13px;
+    margin:0;
+    padding:0;
+    position:absolute;
+}
+
+
+
+#sidebar {
+    vertical-align: top;
+    position: absolute;
+    margin: 1% 2% 0 75.5%;
+    width:23%;
+
+}
+
+#like-button {
+    border-radius: 3px;
+   -webkit-transform: scale(1.25);
+    -moz-transform: scale(1.25);
+    -o-transform: scale(1.25);
+    -ms-transform: scale(1.25);
+    transform: scale(1.25);
+    float:right;
+    margin-right:37%;
+    margin-top: 15%;
+}
+
+#form {
+    width:90%;
+    height:60%;
+    margin:7% 10% 0 10%;
+    vertical-align: center;
+}
+
+#instructions {
+    font-size: 16px;
+    text-align: center;
+    margin:40% 4% 0 4%;
+}
+
+#reply {
+	font-size:15px;
+    text-align: center;
+    margin-top:10%;
+    margin-bottom:7%;
+    margin-left:5%;
+    margin-right:5%;
+}
+
+#click {
+    margin-left:27%;
+}
+
+a {
+	color: 	#473C8B;
+    text-decoration: none;
+}
+#heading {
+	color: #00FFFF;
+    margin-top:7%;
+    text-align: center;
+    margin-left:5%;
+    margin-right:5%;
+}
+
+
+#title {
+	color: #00FFFF;
+	position:absolute;
+	text-align: center;
+	margin-left:25%;
+	margin-right:25%;
+	margin-top:0.8%;
+	font-size:30px;
+
+}
+
+</style>
+
+<script type="text/javascript">
+/*var markers = [
+    ['Bondi Beach', -33.890542, 151.274856],
+    ['Coogee Beach', -33.923036, 151.259052],
+    ['Cronulla Beach', -34.028249, 151.157507],
+    ['Manly Beach', -33.80010128657071, 151.28747820854187],
+    ['Maroubra Beach', -33.950198, 151.259302]
+];*/
+
+
+function initializeMaps() {
+    var latlng = new google.maps.LatLng(37.46, -122.25);
+    var myOptions = {
+        zoom: 10,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false
+  };
+    var map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+    var infowindow = new google.maps.InfoWindow(), marker, i;
+    var bounds = new google.maps.LatLngBounds();
+
+//console.log(markers.length);
+//console.log(bluemarkers.length);
+    if(markers.length>0){
+    for (i = 0; i < markers.length; i++) {  
+        var pos = new google.maps.LatLng(markers[i][0], markers[i][1]);
+        bounds.extend(pos);
+
+        marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            icon: 'static/red_MarkerA.png'
+        });
+
+        var content = markers[i][0] + ',' + markers[i][1];
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    map.fitBounds(bounds);
+
+}
+}
+    if(bluemarkers.length>0){
+    for (i = 0; i < bluemarkers.length; i++) {  
+        var pos = new google.maps.LatLng(bluemarkers[i][0], bluemarkers[i][1]);
+        bounds.extend(pos);
+
+        marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            icon: 'static/blue_MarkerB.png'
+        });
+        var bluecontent = bluemarkers[i][0] + ',' + bluemarkers[i][1];
+
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infowindow.setContent(bluecontent);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    map.fitBounds(bounds);
+
+    }
+}
+}
+
+
+
+var markers = [];
+var bluemarkers = [];
+$(document).ready(function(){
+  $("#click").click(function() {
+    markers = [];
+    bluemarkers = [];
+    var tmpr = document.getElementById('user_lat').value.split("\n");
+    var tmpb = document.getElementById('user_long').value.split("\n");
+
+    if(document.getElementById('user_lat').value != ""){
+    for (var k=0;k<tmpr.length;k++){
+          markers.push(tmpr[k].split(","));
+          //console.log("red");
+    }
+}
+    //console.log(document.getElementById('user_lat').value);
+    //console.log(document.getElementById('user_long').value);
+    if(document.getElementById('user_long').value != ""){
+    for (var k=0;k<tmpb.length;k++){
+          bluemarkers.push(tmpb[k].split(","));
+          //console.log("blue");
+    }
+}
+    initializeMaps();
+}
+)});
+
+
+
+
+
+google.maps.event.addDomListener(window, 'load', initializeMaps);
+</script>
+</head>
+<body>
+
+<div id="map_canvas" style="height:92%; width:75%; margin-top:4.1%;">
+</div>
+<div id="sidebar">
+
+<div id="like-button">
+<!-- LikeBtn.com BEGIN -->
+<span class="likebtn-wrapper" data-style="github" data-dislike_enabled="false" data-tooltip_enabled="false" data-info_message="false"></span>
+<script type="text/javascript" src="//w.likebtn.com/js/w/widget.js" async="async"></script>
+<!-- LikeBtn.com END -->
+</div><br>
+<p id="instructions"><strong>INSTRUCTIONS:</strong><br>
+Enter Lat/Long Coordinates (one per line in format: lat,long [no spaces] - <a href='#' id="examples" onClick="document.getElementById('user_lat').value = '25.767368,-80.18930' + '\n' + '26.088808,-90.40612' + '\n' + '41.727093,-80.97864' + '\n' + '41.727093,-90.97864'">see example</a>)</p>
+<div id="form">
+<textarea style="height:100px;" class="form-control" type="number" name="user_lat" id="user_lat" placeholder="Latitude,Longitude     (Points will be displayed in RED)"></textarea><br>
+<textarea style="height:100px;" class="form-control" type="number" name="user_long" id="user_long" placeholder="Latitude,Longitude    (Points will be displayed in BLUE)""></textarea><br>
+
+<input class="btn btn-large btn-primary" type="button" value="Plot Map Points" id="click"></button><br>
+</div>
+<p id="reply">Please send questions, comments and feature requests to:<br> <a href="mailto:manojsaria@hotmail.com?Subject=Feedback%20on%20plotting%20Map%20Points%20website"><b>manojsaria@hotmail.com</b></a></p>
+</div>
+<div id="title">
+<p>Plot Lat/Long Points on Map by Coordinates</p>
+</div>
+
+
+
+</body>
+</html>
